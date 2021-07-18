@@ -15,7 +15,7 @@ public class UserApplication {
 	public static String myIP = "127.0.0.1";
 	
 	// file server info
-	public static int serverPort = 4000;
+	public static int serverPort;
 	public static String serverIP = "127.0.0.1";
 
     private static Socket socket            = null;
@@ -23,22 +23,33 @@ public class UserApplication {
     private static DataInputStream in     = null;
 
 	// all client info
-	public static int[] portArray = { 2000, 3000,6000 };
-	public static String[] ipArray = {"127.0.0.1", "127.0.0.1","127.0.0.1"};
+	public static int[] portArray;
+	public static String[] ipArray;
 
 	static DMEImplementation dmeImplementation = new DMEImplementation();
 
 	static String messageToPost = null;
 	
 	static Thread thread;
+	
+	static int total_client;
 
 	public static void main(String[] ag) {
-		myPort = Integer.parseInt(ag[0]);
-		name = ag[1];
+		total_client = Integer.parseInt(ag[0]);
+		portArray = new int[total_client];
+		ipArray = new String[total_client];
+		
+		for(int i=0;i<total_client;i++) {
+			ipArray[i] = "127.0.0.1";
+			portArray[i] = Integer.parseInt(ag[i+1]);
+		} 
+		myPort = Integer.parseInt(ag[total_client+1]);
+		name = ag[total_client+2];
+		serverPort = Integer.parseInt(ag[total_client+3]);
+		
 		
 		connectToServer();
 		
-		System.out.println("this is my port "+myPort);
 		thread = new Thread(dmeImplementation);
 		thread.start();
 		
